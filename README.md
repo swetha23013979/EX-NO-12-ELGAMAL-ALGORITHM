@@ -1,5 +1,6 @@
 # EX-NO-12-ELGAMAL-ALGORITHM
-
+### NAME:Swetha D
+### Reg No:212223040222
 ## AIM:
 To Implement ELGAMAL ALGORITHM
 
@@ -24,10 +25,62 @@ To Implement ELGAMAL ALGORITHM
 6. Security: The security of the ElGamal algorithm relies on the difficulty of solving the discrete logarithm problem in a large prime field, making it secure for encryption.
 
 ## Program:
+```
+#include <stdio.h>
+#include <math.h>
 
+// Function to compute modular exponentiation (base^exp % mod)
+long long int modExp(long long int base, long long int exp, long long int mod) {
+    long long int result = 1;
+    while (exp > 0) {
+        if (exp % 2 == 1) {
+            result = (result * base) % mod;
+        }
+        base = (base * base) % mod;
+        exp = exp / 2;
+    }
+    return result;
+}
+
+int main() {
+    long long int p, g, privateKeyA, publicKeyA;
+    long long int k, message, c1, c2, decryptedMessage;
+
+    // Step 1: Input a large prime number (p) and a generator (g)
+    printf("Enter a large prime number (p): ");
+    scanf("%lld", &p);
+    printf("Enter a generator (g): ");
+    scanf("%lld", &g);
+
+    // Step 2: Alice inputs her private key
+    printf("Enter Alice's private key: ");
+    scanf("%lld", &privateKeyA);
+
+    // Step 3: Compute Alice's public key (public_key = g^privateKeyA mod p)
+    publicKeyA = modExp(g, privateKeyA, p);
+    printf("Alice's public key: %lld\n", publicKeyA);
+
+    // Step 4: Bob inputs the message to be encrypted and selects a random k
+    printf("Enter the message to encrypt (as a number): ");
+    scanf("%lld", &message);
+    printf("Enter a random number k: ");
+    scanf("%lld", &k);
+
+    // Step 5: Bob computes ciphertext (c1 = g^k mod p, c2 = (message * publicKeyA^k) mod p)
+    c1 = modExp(g, k, p);
+    c2 = (message * modExp(publicKeyA, k, p)) % p;
+    printf("Encrypted message (c1, c2): (%lld, %lld)\n", c1, c2);
+
+    // Step 6: Alice decrypts the message (decryptedMessage = (c2 * c1^(p-1-privateKeyA)) mod p)
+    decryptedMessage = (c2 * modExp(c1, p - 1 - privateKeyA, p)) % p;
+    printf("Decrypted message: %lld\n", decryptedMessage);
+
+    return 0;
+}
+```
 
 ## Output:
-
+![435538377-5a95c090-a510-42ea-ba25-f2289e9c9363](https://github.com/user-attachments/assets/777259d9-70c2-4a68-9d78-fbfa762f686a)
 
 ## Result:
 The program is executed successfully.
